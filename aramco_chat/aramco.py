@@ -3,6 +3,7 @@ import re
 import chromadb
 from sentence_transformers import SentenceTransformer
 from openai import OpenAI
+import json
 
 
 # Set up OpenAI client
@@ -12,9 +13,17 @@ client = OpenAI(api_key=st.secrets["OPENAI"]["api_key"])
 embedder = SentenceTransformer("all-mpnet-base-v2")
 
 # Setup for ChromaDB client
-chroma_client = chromadb.PersistentClient(path="./aramco")
+chroma_client = chromadb.EphemeralClient()
 collection = chroma_client.get_or_create_collection(name="yearly_reports")
 
+# Load from your exported JSON
+vectors = json.load(open("vectors.json"))
+collection.add(
+    documents=vectors["documents"],
+    embeddings=vectors["embeddings"],
+    ids=vectors["ids"],
+    metadatas=vectors["metadatas"],
+)
 # Set page config
 st.set_page_config(page_title="Aramco Chat", layout="wide")
 

@@ -3,13 +3,10 @@ import re
 import chromadb
 from sentence_transformers import SentenceTransformer
 from openai import OpenAI
-from dotenv import load_dotenv
 
-# Load environment variables
-ret = load_dotenv()
 
 # Set up OpenAI client
-client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
+client = OpenAI(api_key=st.secrets["OPENAI"]["api_key"])
 # client = OpenAI()
 # Initialize embedding model for document search
 embedder = SentenceTransformer("all-mpnet-base-v2")
